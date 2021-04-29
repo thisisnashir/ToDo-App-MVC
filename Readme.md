@@ -256,3 +256,39 @@ Then in the options column we add bootstrap list-button (after googling,then cop
 <p align="center">
     <img src="./readmeResources/home-page-starting-bootstrap.png" alt="Home page beginning look" height="150">
 </p>
+
+
+## Sending Data to View from Controller
+
+There are two main ways(out of many ways) to send data from controller to view. They archetype
+1. Using Model
+2. Using ModelAndView
+
+We will be using Model here first. The code snippet:
+
+```java
+@RequestMapping("/home")
+	public String home(Model model)
+	{
+		String value = "This is the value i want to send";
+		model.addAttribute("key",value);//string is the name of the key or
+    //variable that we will access in the view
+    // and value is an object that is mapped to this
+    //key that we will get in view through key
+		return "home";
+	}
+```
+
+Now to accept and use this value in the view we can use `<% %>` tag but instead we will use jstl for this because it is standard.
+
+To use jstl we will firs include the dependency of jstl( google "jstl maven" and we select 1.2 version) in the pom.xml. Then we add jstl uri (by googling "jstl core uri") add the top of the page and also we set `isELIgnored` value to be false.
+
+```java
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page isELIgnored="false" %>
+```
+
+Then we print the value sent by controller by following snippet.
+```java
+<h1> <c:out value="${key}"></c:out>  </h1>
+```

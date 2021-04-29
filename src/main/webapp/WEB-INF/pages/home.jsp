@@ -1,3 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page isELIgnored="false" %>
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -43,6 +47,7 @@
 
 			<div class="col-md-10">
 				<h3 class="text-center">Contents</h3>
+				<h1> <c:out value="${key}"></c:out>  </h1>
 				<!--  Giving this column remaining 10 grids and centering the text -->
 			</div>
 
