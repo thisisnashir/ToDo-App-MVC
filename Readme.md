@@ -245,3 +245,14 @@ We use our good-old `<% %>` tags to do it.
      //This is a bit old method
 %>
 ```
+
+## Designing Home Page UI
+
+Okay so we pasted bootstrap starter template in our home.jsp. Now Lets add a container and add a title inside it (also centering the title)
+
+Then we add row-column div tag to create two column one containing the options and the other containing contents.
+Then in the options column we add bootstrap list-button (after googling,then copy pasting the template and editing to our preferences) to our page. Then we get the followling which does not do anything now.
+
+<p align="center">
+    <img src="./readmeResources/home-page-starting-bootstrap.png" alt="Home page beginning look" height="150">
+</p>
