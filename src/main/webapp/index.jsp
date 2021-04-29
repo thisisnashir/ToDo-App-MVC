@@ -12,6 +12,12 @@
   </head>
   <body>
     <h1>Hello, world!</h1>
+    
+    <%
+    	//Lets redirect the page to our home page
+    	response.sendRedirect(request.getContextPath()+"/home");
+    	//This is a bit old method
+    %>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

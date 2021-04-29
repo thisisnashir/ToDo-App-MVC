@@ -234,3 +234,14 @@ So we create a `home.jsp` file in the same directory as `index.jsp` file.
 So that should do it. If we run the project we will first see the index page. And if we go to `/home` url we will see the home page which was configured using spring mvc.
 
 ***NOTE:*** We faced some hickups due to the bug of eclipse reversing back to java old version. After reconfiguring with the latest java the error was gone.
+
+Now for convenience, we redirect to our home page  in the index page so both acts like our front page.
+We use our good-old `<% %>` tags to do it.
+
+```java
+<%
+     //Lets redirect the page to our home page
+     response.sendRedirect(request.getContextPath()+"/home");
+     //This is a bit old method
+%>
+```
