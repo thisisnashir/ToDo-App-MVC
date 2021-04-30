@@ -292,3 +292,15 @@ Then we print the value sent by controller by following snippet.
 ```java
 <h1> <c:out value="${key}"></c:out>  </h1>
 ```
+
+Now lets add if condition in our view so that our view is displayed on condition of the data send by controller. Lets choose what to be shown in the view by value of `page` variable sent by our controller.
+
+```html
+<c:if test="${page=='home'}">
+<h1 class="text-center"> All Todos</h1>
+</c:if>
+
+<c:if test="${page=='add'}">
+<h1 class="text-center"> Add Todos</h1>
+</c:if>
+```

@@ -47,7 +47,16 @@
 
 			<div class="col-md-10">
 				<h3 class="text-center">Contents</h3>
-				<h1> <c:out value="${key}"></c:out>  </h1>
+				
+
+				<c:if test="${page=='home'}">
+				<h1 class="text-center"> All Todos</h1>
+				</c:if>
+				
+				<c:if test="${page=='add'}">
+				<h1 class="text-center"> Add Todos</h1>
+				</c:if>
+
 				<!--  Giving this column remaining 10 grids and centering the text -->
 			</div>
 
