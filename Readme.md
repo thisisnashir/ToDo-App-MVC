@@ -304,3 +304,26 @@ Now lets add if condition in our view so that our view is displayed on condition
 <h1 class="text-center"> Add Todos</h1>
 </c:if>
 ```
+## Add url to menu options
+
+Now We add url to our menu option using jstl tag.
+
+```java
+<a href='<c:url value='/add'></c:url>'
+class="list-group-item list-group-item-action">Add ToDo</a>
+
+<a href='<c:url value='/home'></c:url>'
+class="list-group-item list-group-item-action">View Todo</a>
+```
+then we setup the controller to handle those url request.
+
+```java
+@RequestMapping("/add")
+	public String addToDo(Model model)
+	{
+		model.addAttribute("page","add");
+		return "home";
+	}
+```
+
+So now the content of the same home page changes upon clicking on one of the menu options.

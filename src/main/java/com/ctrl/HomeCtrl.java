@@ -13,4 +13,11 @@ public class HomeCtrl {
 		model.addAttribute("page","home");
 		return "home";
 	}
+	
+	@RequestMapping("/add")
+	public String addToDo(Model model)
+	{
+		model.addAttribute("page","add");
+		return "home";
+	}
 }

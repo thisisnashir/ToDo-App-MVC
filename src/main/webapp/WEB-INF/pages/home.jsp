@@ -36,10 +36,10 @@
 					<button type="button"
 						class="list-group-item list-group-item-action active">
 						Menu</button>
-					<button type="button"
-						class="list-group-item list-group-item-action">Add ToDo</button>
-					<button type="button"
-						class="list-group-item list-group-item-action">View Todo</button>
+					<a href='<c:url value='/add'></c:url>'
+						class="list-group-item list-group-item-action">Add ToDo</a>
+					<a href='<c:url value='/home'></c:url>'
+						class="list-group-item list-group-item-action">View Todo</a>
 				</div>
 
 
@@ -50,7 +50,7 @@
 				
 
 				<c:if test="${page=='home'}">
-				<h1 class="text-center"> All Todos</h1>
+				<h1 class="text-center"> View Todos</h1>
 				</c:if>
 				
 				<c:if test="${page=='add'}">
