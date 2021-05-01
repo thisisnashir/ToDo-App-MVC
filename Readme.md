@@ -530,6 +530,13 @@ model.addAttribute("todos",list);
 model.addAttribute("page","home");
       // so that the added message and all the message are shown to user upon adding
 ... ... ...
-``````````
+```
+So the project is now ready.
 
-So that should complete the todo-web-app using spring-MVC wihtout any database. Next we need to learn how incorporate a database into our project.
+<p align="center">
+    <img src="./readmeResources/sc-1.png" alt="Logo" width="300">  <img src="./readmeResources/sc-2.png" alt="Logo" width="300">
+</p>
+
+<p align="center">
+  <img src="./readmeResources/sc-3.png" alt="Logo" width="300">  <img src="./readmeResources/sc-4.png" alt="Logo" width="300">
+</p>
