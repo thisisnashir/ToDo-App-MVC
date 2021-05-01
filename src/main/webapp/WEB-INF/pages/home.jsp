@@ -20,10 +20,19 @@
 <title>HomePage!</title>
 </head>
 <body>
-	<div class="conainer mt-3">
+	<div class="conainer mt-3 ml-5 mr-5">
 		<!-- creating a container and adding margin from top by 3 unit and adding class text-center so that the text are centerted -->
 
 		<h1 class="text-center">This is the HomePage</h1>
+
+
+		<c:if test="${not empty msg}">
+			<div class="alert alert-success">
+
+				<b><c:out value="${msg}"></c:out></b>
+
+			</div>
+		</c:if>
 
 
 		<div class="row mt-5 ml-5">
@@ -56,16 +65,16 @@
 
 				<c:if test="${page=='add'}">
 					<h1 class="text-center">Add Todos</h1>
-					    <!-- action="saveToDo" adds relative url -->
+					<!-- action="saveToDo" adds relative url -->
 					<form:form action="saveTodo" method="post" modelAttribute="todo">
-						 <!-- the todo of modelAttribute="todo" comes from the controller which tells spring what entity to used for mapping-->
+						<!-- the todo of modelAttribute="todo" comes from the controller which tells spring what entity to used for mapping-->
 						<!-- the action and method part of the form is traditional -->
 						<!-- the model attribute value will be used in the controller to recognize the form to be mapped with the entity -->
 
 						<div class="form-group">
 							<form:input cssClass="form-control"
 								placeholder="Enter your todo title" path="todoTitle" />
-										<!-- the path has to match exactly the variable name in the entity class-->
+							<!-- the path has to match exactly the variable name in the entity class-->
 						</div>
 
 						<div class="form-group">
@@ -78,7 +87,7 @@
 						</div>
 
 					</form:form>
-				
+
 				</c:if>
 
 				<!--  Giving this column remaining 10 grids and centering the text -->

@@ -416,3 +416,74 @@ Now since the form action hits `saveTodo` url we need to add a method for it in 
 
 Now we can actually save the data without a permanent database. But that would mean the data would be lost every time the server is restarted.
 But to keep the data as long as the server run we can use the `context` object which would be initiated at the beginning of running the server and is available to us as long as the server runs.
+
+We create a `MyListener` class in `com.listener` package which implements `ServletContextListener`. Then we override the two `contextDestroyed` and `contextInitialized` method.
+
+```java
+public class MyListener implements ServletContextListener{
+
+	public void contextDestroyed(ServletContextEvent sce) {
+		// TODO Auto-generated method stub
+	}
+
+	public void contextInitialized(ServletContextEvent sce) {
+		// TODO Auto-generated method stub
+		System.out.println("Context Created");
+			//This method will be called when a context is created
+			//When the server is started the context will be created
+
+		List<Todo> list = new ArrayList<Todo>();
+		ServletContext context = sce.getServletContext();
+				//This ServletContext object is a singletone and only one is created througout the project
+		context.setAttribute("list", list);
+	}
+}
+```
+
+Now we need to edit the `web.xml` file to acknowledge this listener class.
+```xml
+<listener>
+    	<listener-class>com.listener.MyListener</listener-class>
+</listener>
+```
+
+Now we declare a `ServletContext` obeject context in the controller class and bind it to the singletone `ServletContext` object of the project using `@Autowired` annotation.
+
+```java
+@Controller
+public class HomeCtrl {
+
+	@Autowired
+	ServletContext context;
+	... ...
+```
+
+
+Now we edit the `saveToDo` method to get the existing list of entries from the context object and add the new entry to the list.
+
+```java
+@RequestMapping(value="/saveTodo",method=RequestMethod.POST)
+	public String saveTodo(@ModelAttribute("todo") Todo t,  Model model)
+	{
+		t.setTodoDate(new Date());
+		System.out.println(t);
+
+		List<Todo> list = (List<Todo>)context.getAttribute("list");
+			//Get the already existing lists
+		list.add(t);
+			//adding our new entry to the lists
+		model.addAttribute("msg","Successfully entry added ...");
+        // A message to be shown on the view so that user know the entry is saved
+		return "home";
+	}
+```
+
+We edit  the view a bit so that we can see a success message upon the data is saved.
+
+```html
+<c:if test="${not empty msg}">
+	<div class="alert alert-success">
+	<b><c:out value="${msg}"></c:out></b>
+	</div>
+</c:if>
+```
