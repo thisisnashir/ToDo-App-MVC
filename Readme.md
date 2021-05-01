@@ -540,3 +540,6 @@ So the project is now ready.
 <p align="center">
   <img src="./readmeResources/sc-3.png" alt="Logo" width="300">  <img src="./readmeResources/sc-4.png" alt="Logo" width="300">
 </p>
+
+
+So we have completed the todo-web-app using spring-MVC wihtout any database. Next we need to learn how incorporate a database into our project.
