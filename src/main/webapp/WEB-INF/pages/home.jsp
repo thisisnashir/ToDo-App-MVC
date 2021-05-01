@@ -1,5 +1,6 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page isELIgnored="false" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page isELIgnored="false"%>
 
 
 <!doctype html>
@@ -37,9 +38,9 @@
 						class="list-group-item list-group-item-action active">
 						Menu</button>
 					<a href='<c:url value='/add'></c:url>'
-						class="list-group-item list-group-item-action">Add ToDo</a>
-					<a href='<c:url value='/home'></c:url>'
-						class="list-group-item list-group-item-action">View Todo</a>
+						class="list-group-item list-group-item-action">Add ToDo</a> <a
+						href='<c:url value='/home'></c:url>'
+						class="list-group-item list-group-item-action">View Todos</a>
 				</div>
 
 
@@ -47,14 +48,37 @@
 
 			<div class="col-md-10">
 				<h3 class="text-center">Contents</h3>
-				
+
 
 				<c:if test="${page=='home'}">
-				<h1 class="text-center"> View Todos</h1>
+					<h1 class="text-center">View Todos</h1>
 				</c:if>
-				
+
 				<c:if test="${page=='add'}">
-				<h1 class="text-center"> Add Todos</h1>
+					<h1 class="text-center">Add Todos</h1>
+					    <!-- action="saveToDo" adds relative url -->
+					<form:form action="saveTodo" method="post" modelAttribute="todo">
+						 <!-- the todo of modelAttribute="todo" comes from the controller which tells spring what entity to used for mapping-->
+						<!-- the action and method part of the form is traditional -->
+						<!-- the model attribute value will be used in the controller to recognize the form to be mapped with the entity -->
+
+						<div class="form-group">
+							<form:input cssClass="form-control"
+								placeholder="Enter your todo title" path="todoTitle" />
+										<!-- the path has to match exactly the variable name in the entity class-->
+						</div>
+
+						<div class="form-group">
+							<form:textarea cssClass="form-control" cssStyle="height:300px"
+								placeholder="Enter your todo Content" path="todoContent" />
+						</div>
+
+						<div class="container text-center">
+							<button class="btn btn-outline-success">Add Todo</button>
+						</div>
+
+					</form:form>
+				
 				</c:if>
 
 				<!--  Giving this column remaining 10 grids and centering the text -->

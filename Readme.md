@@ -306,7 +306,7 @@ Now lets add if condition in our view so that our view is displayed on condition
 ```
 ## Add url to menu options
 
-Now We add url to our menu option using jstl tag.
+Now We add url to our menu option using jstl tag (we use jstl tags becuase it helps us to add relative url).
 
 ```java
 <a href='<c:url value='/add'></c:url>'
@@ -327,3 +327,92 @@ then we setup the controller to handle those url request.
 ```
 
 So now the content of the same home page changes upon clicking on one of the menu options.
+
+## Receive data from the view
+
+To receive data from the view we need to add a form. Traditionally we would use normal html and then extract the form data using `request.getParameter("id")` where id would be the id of a field of the form. We would recieve the data as string and would have to later typecast if necessary. But this is a bit tedious if the form is too big and since most of the time we just save the data from the form into an entity we can make this process easier by using `@modelAttribute("")` annotation and spring-form altogether.
+
+To do this we first create an entity class "Todo" in `com.entities` package. We add the field we need for this entity.
+
+```java
+public class Todo {
+	private String todoTitle;
+	private String todoContent;
+	private Date todoDate;
+}
+
+```
+and then we add necessary constructor and getter and setters.
+
+Now to use the spring-form in our view we add spring-form uri at the top of the `home.jsp` page.
+
+```html
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
+```
+Before we write the form in our page, since the form will be mapped with an entity we need to make the entity object available in our view to be used.
+The object taht we will send is just a non initialized instance.
+
+```java
+@RequestMapping("/add")
+	public String addToDo(Model model)
+	{
+    Todo t = new Todo();
+		model.addAttribute("todo",t);
+        //We are sending the entity to the view to be used in the form for mapping
+
+		model.addAttribute("page","add");
+		return "home";
+	}
+```
+
+Then we add the spring form in the if condition of the view where page is equal to add.
+
+```html
+    <!-- action="saveToDo" adds relative url -->
+<form:form action="saveToDo" method="post" modelAttribute="todo">
+          <!-- the todo of modelAttribute="todo" comes from the controller which tells spring what entity to used for mapping-->
+	<!-- the action and method part of the form is traditional -->
+	<!-- the model attribute value will be used in the controller to recognize the form to be mapped with the entity -->
+
+	<div class="form-group">
+		<form:input cssClass="form-control"
+			placeholder="Enter your todo title" path="todoTitle" />
+					<!-- the path has to match exactly the variable name in the entity class-->
+	</div>
+
+	<div class="form-group">
+		<form:textarea cssClass="form-control" cssStyle="height:300px"
+			placeholder="Enter your todo Content" path="todoContent" />
+	</div>
+
+	<div class="container">
+		<button class="btn btn-outline-success text-center">Add Todo</button>
+	</div>
+
+</form:form>
+```
+
+The path field is very important here. This has to be exactly the name of the variable of the entity class in which we want to save this field's data.
+
+Now since the form action hits `saveTodo` url we need to add a method for it in our controller.
+
+```java
+@RequestMapping(value="/saveTodo",method=RequestMethod.POST)
+	public String saveTodo(@ModelAttribute("todo") Todo t,  Model model)
+	{
+		System.out.println(t);
+		return "home";
+	}
+```
+`@ModelAttribute` annotation is used to get the form mapped into the object t. Now all we have to do is use ORM to save the object into our database.
+
+
+<p align="center">
+    <img src="./readmeResources/the-from.png" alt="Logo" >
+  </p>
+
+
+## Saving the data Without a Database
+
+Now we can actually save the data without a permanent database. But that would mean the data would be lost every time the server is restarted.
+But to keep the data as long as the server run we can use the `context` object which would be initiated at the beginning of running the server and is available to us as long as the server runs.
