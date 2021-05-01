@@ -24,6 +24,10 @@ public class HomeCtrl {
 	public String home(Model model)
 	{
 		model.addAttribute("page","home");
+		
+		List<Todo> list = (List<Todo>)context.getAttribute("list");
+		model.addAttribute("todos",list);
+				//List of all todos are sent to the view to be shown
 		return "home";
 	}
 	
@@ -47,6 +51,9 @@ public class HomeCtrl {
 		list.add(t);
 			//adding our new entry to the lists
 		model.addAttribute("msg","Successfully entry added ...");// A message to be shown on the view so that user know the entry is saved
+		
+		model.addAttribute("todos",list);
+		model.addAttribute("page","home"); // so that the added message and all the message are shown to user upon adding
 		return "home";
 	}
 }

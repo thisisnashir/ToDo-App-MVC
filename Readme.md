@@ -487,3 +487,49 @@ We edit  the view a bit so that we can see a success message upon the data is sa
 	</div>
 </c:if>
 ```
+
+Now we change the `home` method in the controller to send the list of all todos in the view.
+
+
+```java
+@RequestMapping("/home")
+	public String home(Model model)
+	{
+		model.addAttribute("page","home");
+
+    List<Todo> list = (List<Todo>)context.getAttribute("list");
+		model.addAttribute("todos",list);
+        //List of all todos are sent to the view to be shown
+		return "home";
+	}
+```
+
+Now we edit the view to so that we can show the lists.
+
+
+
+```html
+<c:forEach items="${todos}" var="t">
+			<div class="card">
+				<div class="card-body">
+					<h1>
+						<c:out value="${t.todoTitle}"></c:out>
+					</h1>
+					<p>
+						<c:out value="${t.todoContent}"></c:out>
+					</p>
+				</div>
+			</div>
+</c:forEach>
+```
+
+We edit the `saveTodo` method of the controller so that user can see all todos upon submitting the new todo.
+```java
+... ... ...
+model.addAttribute("todos",list);
+model.addAttribute("page","home");
+      // so that the added message and all the message are shown to user upon adding
+... ... ...
+``````````
+
+So that should complete the todo-web-app using spring-MVC wihtout any database. Next we need to learn how incorporate a database into our project.

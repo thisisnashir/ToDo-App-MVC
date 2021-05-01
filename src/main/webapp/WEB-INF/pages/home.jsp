@@ -61,6 +61,21 @@
 
 				<c:if test="${page=='home'}">
 					<h1 class="text-center">View Todos</h1>
+
+					<c:forEach items="${todos}" var="t">
+						<div class="card">
+							<div class="card-body">
+								<h1>
+									<c:out value="${t.todoTitle}"></c:out>
+								</h1>
+								<p>
+									<c:out value="${t.todoContent}"></c:out>
+								</p>
+							</div>
+						</div>
+					</c:forEach>
+
+
 				</c:if>
 
 				<c:if test="${page=='add'}">
