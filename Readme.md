@@ -524,13 +524,17 @@ Now we edit the view to so that we can show the lists.
 ```
 
 We edit the `saveTodo` method of the controller so that user can see all todos upon submitting the new todo.
+
+
 ```java
+
 ... ... ...
 model.addAttribute("todos",list);
 model.addAttribute("page","home");
       // so that the added message and all the message are shown to user upon adding
 ... ... ...
 ```
+
 So the project is now ready.
 
 <p align="center">
@@ -543,3 +547,7 @@ So the project is now ready.
 
 
 So we have completed the todo-web-app using spring-MVC wihtout any database. Next we need to learn how incorporate a database into our project.
+
+## Incorporating Hibernate
+
+Now we are gonna use hibernate and mysql for storing our data. So first we delete `com.listener` package. Then we also remove the `<listener>` tag in our `web.xml` file since we will not need it. Then we include the dependency for hibernate and mysql in `pom.xml` file. Also we need include the dependency for spring-orm too since we will be takng advantage of that too. (We should match the version of the spring-orm and spring-mvc.. In this project, both version will be 4.3.13)
