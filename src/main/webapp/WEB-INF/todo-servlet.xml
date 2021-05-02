@@ -14,7 +14,7 @@
         
         ">
 	
-	<context:component-scan base-package="com.ctrl"/>
+	<context:component-scan base-package="com"/>
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 					<!-- the class name can be found by pressing ctrl+shift+t inside a java class in eclipse and typing internares -->
@@ -33,7 +33,7 @@
 			<!-- Providing the driver class-->
 	<property name="url" value="jdbc:mysql://localhost:3306/todomanager" />
 			<!-- Providing the location of the endpoint of db-->
-	<property name="username" value="root123" />
+	<property name="username" value="root" />
 			<!-- Providing the username of the database-->
 	<property name="password" value="root123" />
 			<!-- Providing the password for the db -->
@@ -50,9 +50,9 @@
 			 does not have a single value but rather consist of multiple values which we 
 			clarify using 'prop' tag inside 'props' tag -->
 			
-			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect5</prop>
+			<prop key="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</prop>
 				<!--To get this full value of the prop key in eclipse we write 'mysql' after ctrl+shit+t -->
-			<prop key="hibernate.hbm2ddl.auto">true</prop>
+			<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<!--Auto Table creation -->
 			<prop key="hibernate.show_sql">true</prop>
 				<!--To see the full sql in the console when hibernate query runs -->
@@ -73,6 +73,12 @@
 	</list>
 	</property>
 	
+	
+	</bean>
+	
+	<bean class="org.springframework.orm.hibernate5.HibernateTemplate" name="hibernateTemplate">
+	
+		<property name="sessionFactory" ref="sessionFactory" />
 	
 	</bean>
 	

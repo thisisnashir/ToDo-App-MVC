@@ -12,20 +12,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dao.TodoDao;
 import com.entities.Todo;
 
 @Controller
 public class HomeCtrl {
 	
 	@Autowired
-	ServletContext context;
+	TodoDao todoDao;
 	
 	@RequestMapping("/home")
 	public String home(Model model)
 	{
 		model.addAttribute("page","home");
 		
-		List<Todo> list = (List<Todo>)context.getAttribute("list");
+		List<Todo> list = (List<Todo>)todoDao.getAll();
 		model.addAttribute("todos",list);
 				//List of all todos are sent to the view to be shown
 		return "home";
@@ -46,9 +47,9 @@ public class HomeCtrl {
 		t.setTodoDate(new Date());
 		System.out.println(t);
 		
-		List<Todo> list = (List<Todo>)context.getAttribute("list");
+		List<Todo> list = (List<Todo>)todoDao.getAll();
 			//Get the already existing lists
-		list.add(t);
+		todoDao.save(t);
 			//adding our new entry to the lists
 		model.addAttribute("msg","Successfully entry added ...");// A message to be shown on the view so that user know the entry is saved
 		

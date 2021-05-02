@@ -572,7 +572,7 @@ Now we follow the following steps:
 			<!-- Providing the driver class-->
 	<property name="url" value="jdbc:mysql://localhost:3306/todomanager" />
 			<!-- Providing the location of the endpoint of db-->
-	<property name="username" value="root123" />
+	<property name="username" value="root" />
 			<!-- Providing the username of the database-->
 	<property name="password" value="root123" />
 			<!-- Providing the password for the db -->
@@ -597,9 +597,9 @@ To get the class name in eclipse we press `ctrl-shift-t` and type `DriverManager
     does not have a single value but rather consist of multiple values which we
     clarify using 'prop' tag inside 'props' tag -->
 
-        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect5</prop>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</prop>
         <!--To get this full value of the prop key in eclipse we write 'mysql' after ctrl+shit+t -->
-        <prop key="hibernate.hbm2ddl.auto">true</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
         <!--Auto Table creation -->
         <prop key="hibernate.show_sql">true</prop>
         <!--To see the full sql in the console when hibernate query runs -->
@@ -634,6 +634,84 @@ There are many more properties inside the class that we can configure if we need
 @Entity
 public class Todo {
 	@Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //for auto increment
 	private int id;
 ```
 5. Now we create `HibernateTemplate` and the pass `sessionFactory` object created above in it.
+```xml
+</bean>
+	<bean class="org.springframework.orm.hibernate5.HibernateTemplate" name="hibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+</bean>
+```
+
+6. Now since all the necessary object has been created with the appropriate properties, now we go and create `TodoDao` class in `com.dao` package and use this necessary objects inside it and we use `@Autowired` annotation to tell spring use the object we created in `todo-servlet.xml` file.
+```java
+@Component
+      //this tag is important, we use this so we do not need
+      //to use bean tag to specify this class to spring
+public class TodoDao {
+	@Autowired
+	HibernateTemplate hibernateTemplate;
+
+	public int save(Todo t)
+	{
+		Integer id = (Integer)this.hibernateTemplate.save(t);
+		return id;
+	}
+	public List<Todo>getAll()
+	{
+		List<Todo> list = (List<Todo>)this.hibernateTemplate.loadAll(Todo.class);
+		return list;
+	}
+}
+```
+
+We need to tell spring to scan this class. we change the line `<context:component-scan base-package="com.ctrl"/>` in `todo-servlet.xml` file to the following.
+
+```xml
+<context:component-scan base-package="com"/>
+  <!-- now spring will can entire com package and TodoDao will be scanned as well -->
+```
+
+7. Now we decalare a `TodoDao` object in our controller and use `@Autowired`to link it.(Spring will automatically create a object of this class and insert it there. Normally we would have to use bean tag but since we used `@Component` annotation spring knows about it)
+And the we modify our `home` and `saveTodo` methods.
+
+```java
+@Autowired
+	TodoDao todoDao;
+
+	@RequestMapping("/home")
+	public String home(Model model)
+	{
+		model.addAttribute("page","home");
+
+		       /** --Retrieving the objects-->>> **/List<Todo> list = (List<Todo>)todoDao.getAll();
+		model.addAttribute("todos",list);
+				//List of all todos are sent to the view to be shown
+		return "home";
+	}
+
+	@RequestMapping(value="/saveTodo",method=RequestMethod.POST)
+	public String saveTodo(@ModelAttribute("todo") Todo t,  Model model)
+	{
+		t.setTodoDate(new Date());
+		System.out.println(t);
+
+		         /** --Retrieving the objects-->>> **/List<Todo> list = (List<Todo>)todoDao.getAll();
+			//Get the already existing lists
+		         /** --saving the object-->>>**/todoDao.save(t);
+			//adding our new entry to the lists
+		model.addAttribute("msg","Successfully entry added ...");// A message to be shown on the view so that user know the entry is saved
+
+		model.addAttribute("todos",list);
+		model.addAttribute("page","home"); // so that the added message and all the message are shown to user upon adding
+		return "home";
+	}
+```
+So now if we run our project, we see that the project runs smoothly but when we try to save data we get errors saying, DB is read only. That means so far we have configured our project for only read only mode of the database.
+
+To write data we know that, we need to open `transaction` (from hibernate-tests). We are gonna use spring to do that( mangae transaction). We do it the folowing way.
+
+7. we add the following `bean` in our `todo-servlet.xml` file.
