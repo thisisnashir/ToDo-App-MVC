@@ -722,7 +722,7 @@ So now if we run our project, we see that the project runs smoothly but when we 
 
 To write data we know that, we need to open `transaction` (from hibernate-tests). We are gonna use spring to do that( mangae transaction). We do it the folowing way.
 
-7. we add the following `bean` in our `todo-servlet.xml` file for the `HibernateTransactionManager` class.
+8. we add the following `bean` in our `todo-servlet.xml` file for the `HibernateTransactionManager` class.
 
 ```xml
 <bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" name="transactionManager">
