@@ -551,3 +551,89 @@ So we have completed the todo-web-app using spring-MVC wihtout any database. Nex
 ## Incorporating Hibernate
 
 Now we are gonna use hibernate and mysql for storing our data. So first we delete `com.listener` package. Then we also remove the `<listener>` tag in our `web.xml` file since we will not need it. Then we include the dependency for hibernate and mysql in `pom.xml` file. Also we need include the dependency for spring-orm too since we will be takng advantage of that too. (We should match the version of the spring-orm and spring-mvc.. In this project, both version will be 4.3.13)
+
+
+So now to incorporate hibernate into our project we need create a class `TodoDao` which will handle the database stuffs ie. in our `TodoDao` class we will create `save()`,`getall()`,`update()` etc method or different database action. In order to use this methods (for DB) we would first need to inherit the base class (`implements`) `HibernateTemplate` and then override the necessary method inside the class. But our `HibernateTemplate` class would need `SessionFactory` object for hibernate operation. In order to provide it to the `HibernateTemplate` class `HibernateTemplate` would need to inherit (`implements`) from a class called `LocalSessionFactoryBean`. But we would first have to provide `DataSource` to `LocalSessionFactoryBean` where `DataSource` means `username`, `password`, `database-name` etc. To provide `DataSource` thouse information, we will use something called `DriverManagerDataSource`
+
+`TodoDao` `<--` `HibernateTemplate` `<--`  `LocalSessionFactoryBean` `<==` `DataSource` `<==`  `DriverManagerDataSource`
+
+***NOTE THAT:*** We use `LocalSessionFactoryBean` instead of `SessionFactory` because `SessionFactory` is an abstract class and we can tell spring to create an object of that class(As we can not create an object of an abstract class). But `LocalSessionFactoryBean` implements `SessionFactory` class, so we will be using that class instead.
+
+Now we follow the following steps:
+1. We first create a database named 'todomanager' in mysql using `SQLyog`
+2. We edit `todo-servlet.xml` file.First we create `bean` for  `DriverManagerDataSource` class
+
+```xml
+      </bean>
+
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" name="dataSource">
+			<!-- Providing the class-name for dataSource -->
+	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+			<!-- Providing the driver class-->
+	<property name="url" value="jdbc:mysql://localhost:3306/todomanager" />
+			<!-- Providing the location of the endpoint of db-->
+	<property name="username" value="root123" />
+			<!-- Providing the username of the database-->
+	<property name="password" value="root123" />
+			<!-- Providing the password for the db -->
+	</bean>
+```
+
+To get the class name in eclipse we press `ctrl-shift-t` and type `DriverManagerDataSource`.
+***NOTE THAT:*** By `<bean>` tag we tell spring to create a object of a class and basically describe necessary properties it needs to consider in creating that class. And in the above example we give that object a name `dataSource` that we will be using later.
+
+***NOTE THAT:*** The properties(name) that we mention above are member variables inside the class and we are basically assigning values to them
+3. Now we need to tell spring to use this `dataSource` object of `DriverManagerDataSource` class in `LocalSessionFactoryBean` class.
+
+```xml
+<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" name="sessionFactory">
+    <property name="dataSource" ref="dataSource" />
+    <!--Note we are using ref instead of value as we are not assigning a value but rather referencing the already created object above -->
+
+    <property name="hibernateProperties">
+    <!--we need to configure the hibernate properties-->
+    <props>
+    <!--We are using props tag as the property class(variable hibernateProperties's type)
+    does not have a single value but rather consist of multiple values which we
+    clarify using 'prop' tag inside 'props' tag -->
+
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect5</prop>
+        <!--To get this full value of the prop key in eclipse we write 'mysql' after ctrl+shit+t -->
+        <prop key="hibernate.hbm2ddl.auto">true</prop>
+        <!--Auto Table creation -->
+        <prop key="hibernate.show_sql">true</prop>
+        <!--To see the full sql in the console when hibernate query runs -->
+        </props>
+
+    </property>
+
+    <!-- NOW we need to mention the entities -->
+    <property name="annotatedClasses">
+
+        <list>
+        <!--We will be using list tag as the "annotatedClasses" variable is list
+        Each item of the list must be separated by a value tag
+        -->
+            <value>
+            com.entities.Todo
+            </value>
+        </list>
+    </property>
+
+</bean>
+```
+
+Now we can annotate our entities classes using necessary tags(`@Entity`,`@Id` etc).
+There are many more properties inside the class that we can configure if we need for example `mappingResources` property if we needed mapping in our project.
+
+
+***NOTE THAT:*** To get the necessary property name we can just to the class file (ctr-shift-t and then type the name of class) and search the member variables
+
+4. Now we use necessary hibernate annotation tag in our entities.
+```java
+@Entity
+public class Todo {
+	@Id
+	private int id;
+```
+5. Now we create `HibernateTemplate` and the pass `sessionFactory` object created above in it.

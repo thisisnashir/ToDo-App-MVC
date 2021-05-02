@@ -2,7 +2,10 @@ package com.entities;
 
 import java.util.Date;
 
+@Entity
 public class Todo {
+	@Id
+	private int id;
 	private String todoTitle;
 	private String todoContent;
 	private Date todoDate;

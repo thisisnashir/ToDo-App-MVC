@@ -27,6 +27,55 @@
 						<!-- The webpages will end with .jsp extension -->
 	</bean>
 	
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" name="dataSource">
+			<!-- Providing the class-name for dataSource -->
+	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+			<!-- Providing the driver class-->
+	<property name="url" value="jdbc:mysql://localhost:3306/todomanager" />
+			<!-- Providing the location of the endpoint of db-->
+	<property name="username" value="root123" />
+			<!-- Providing the username of the database-->
+	<property name="password" value="root123" />
+			<!-- Providing the password for the db -->
+	</bean>
+	<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" name="sessionFactory">
+	<property name="dataSource" ref="dataSource" />
+			<!--Note we are using ref instead of value as we are not assigning a value but rather referencing the already created object above -->
+			
+			
+	<property name="hibernateProperties">
+		<!--we need to configure the hibernate properties-->
+		<props>
+			<!--We are using props tag as the property class(variable hibernateProperties's type) 
+			 does not have a single value but rather consist of multiple values which we 
+			clarify using 'prop' tag inside 'props' tag -->
+			
+			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect5</prop>
+				<!--To get this full value of the prop key in eclipse we write 'mysql' after ctrl+shit+t -->
+			<prop key="hibernate.hbm2ddl.auto">true</prop>
+				<!--Auto Table creation -->
+			<prop key="hibernate.show_sql">true</prop>
+				<!--To see the full sql in the console when hibernate query runs -->
+		</props>
+		
+	</property>
+		
+		<!-- NOW we need to mention the entities -->
+	<property name="annotatedClasses">
+	
+	<list>
+		<!--We will be using list tag as the "annotatedClasses" variable is list
+		Each item of the list must be separated by a value tag
+		 -->
+		<value> 
+			com.entities.Todo
+		</value>
+	</list>
+	</property>
+	
+	
+	</bean>
+	
     <mvc:annotation-driven />
 
 </beans>
