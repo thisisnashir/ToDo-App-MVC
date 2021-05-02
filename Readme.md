@@ -714,4 +714,66 @@ So now if we run our project, we see that the project runs smoothly but when we 
 
 To write data we know that, we need to open `transaction` (from hibernate-tests). We are gonna use spring to do that( mangae transaction). We do it the folowing way.
 
-7. we add the following `bean` in our `todo-servlet.xml` file.
+7. we add the following `bean` in our `todo-servlet.xml` file for the `HibernateTransactionManager` class.
+
+```xml
+<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" name="transactionManager">
+	<property name="sessionFactory" ref="sessionFactory"> </property>
+		<!-- we need to pass our sessionFactory object into it-->
+</bean>
+```
+
+Now to use transaction-mode easily ie. to use annotation we need to add some more lines in our `todo-servlet.xml` file for `tx` schema.
+```xml
+... ... ...
+xmlns:mvc="http://www.springframework.org/schema/mvc"
+xmlns:context="http://www.springframework.org/schema/context"
+
+                           xmlns:tx="http://www.springframework.org/schema/tx"
+
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+
+                          http://www.springframework.org/schema/tx
+                          http://www.springframework.org/schema/tx/spring-tx.xsd
+
+    ">
+                          <tx:annotation-driven />
+... ... ...
+```
+
+Now we can just use `@Transactional` above any method that saves something in the database.
+So we do this for `save()` method of `TodoDao` class.
+```java
+@Component
+public class TodoDao {
+	@Autowired
+	HibernateTemplate hibernateTemplate;
+
+	@Transactional
+	public int save(Todo t)
+	{
+		Integer id = (Integer)this.hibernateTemplate.save(t);
+		return id;
+	}
+```
+
+So now that should complete our hibernate configuration for our project. Now we can read and write to our MySQL database using hibernate.
+
+
+<p align="center">
+    <img src="./readmeResources/todo-list.-final-view.png" alt="View todos on webapp"  width="400">
+</p>
+
+<p align="center">
+    <img src="./readmeResources/db-screenshot.png" alt="View todos on database"  width="400">
+</p>
+
+Now we can see that, our view todos on the site is reflected in our database as well and now the datas  do not disappear when the server is restarted.

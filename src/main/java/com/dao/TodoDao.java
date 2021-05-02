@@ -1,5 +1,6 @@
 package com.dao;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class TodoDao {
 	@Autowired
 	HibernateTemplate hibernateTemplate;
 	
+	@Transactional
 	public int save(Todo t)
 	{
 		Integer id = (Integer)this.hibernateTemplate.save(t);
