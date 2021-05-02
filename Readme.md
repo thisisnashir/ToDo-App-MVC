@@ -22,6 +22,14 @@
       </li>
       <li><a href="#built-with">Built With</a></li>
       <li><a href="#getting-started">Getting started</a></li>
+      <li><a href="#adding-bootstrap">Adding Bootstrap</a></li>
+      <li><a href="#configuring-project">Configuring Project</a></li>
+      <li><a href="#designing-home-page-ui">Designing Home Page UI</a></li>
+      <li><a href="#sending-data-to-view-from-controller">Sending Data to View from Controller</a></li>
+      <li><a href="#add-url-to-menu-options">Add url to menu options</a></li>
+      <li><a href="#receive-data-from-the-view">Receive data from the view</a></li>
+      <li><a href="#saving-the-data-without-a-database">Saving the data Without a Database</a></li>
+      <li><a href="#incorporating-hibernate">Incorporating Hibernate</a></li>
     </ol>
   </details>
 
